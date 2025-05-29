@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+from apps.users.domain.managers import CustomUserManager
 
 class User(AbstractUser):
     # remoção do username para usar o email como fator de login
@@ -13,6 +14,8 @@ class User(AbstractUser):
     # define 'email' como campo de login
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['nome']
+
+    objects = CustomUserManager()
 
     def __str__(self):
         return self.email
