@@ -1,0 +1,88 @@
+ReviewRest/
+├── manage.py
+├── ReviewRest/                   # Diretório do projeto Django (configurações globais)
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py                   # URLs globais do projeto
+│   ├── wsgi.py
+│   └── asgi.py
+├── apps/                         # Diretório para manter nossos apps organizados
+│   ├── __init__.py               # Torna 'apps' um pacote Python
+│   │
+│   ├── users/                    # App para usuários
+│   │   ├── __init__.py
+│   │   ├── apps.py               # Configuração do App (ex: apps.users.UsersConfig)
+│   │   ├── admin.py              # Registro dos models no Django Admin
+│   │   │
+│   │   ├── domain/
+│   │   │   ├── __init__.py
+│   │   │   └── models.py         # Entidade User, Value Objects relacionados (se houver)
+│   │   │
+│   │   ├── application/
+│   │   │   ├── __init__.py
+│   │   │   └── services.py       # Casos de uso (ex: UserRegistrationService, UserLoginService)
+│   │   │   └── # dtos.py         # (Opcional) Data Transfer Objects
+│   │   │
+│   │   ├── infrastructure/
+│   │   │   ├── __init__.py
+│   │   │   └── repositories.py   # Implementação do UserRepository (usando Django ORM)
+│   │   │
+│   │   ├── api/                  # Camada de Interface/Apresentação (API REST)
+│   │   │   ├── __init__.py
+│   │   │   ├── serializers.py    # DRF Serializers para User
+│   │   │   ├── views.py          # DRF APIViews/ViewSets para User
+│   │   │   └── urls.py           # Mapeamento de URLs para as views do app users
+│   │   │
+│   │   └── migrations/
+│   │
+│   ├── restaurants/              # App para restaurantes
+│   │   ├── __init__.py
+│   │   ├── apps.py
+│   │   ├── admin.py
+│   │   │
+│   │   ├── domain/
+│   │   │   ├── __init__.py
+│   │   │   └── models.py         # Entidade Restaurant
+│   │   │
+│   │   ├── application/
+│   │   │   ├── __init__.py
+│   │   │   └── services.py       # Casos de uso para Restaurant
+│   │   │
+│   │   ├── infrastructure/
+│   │   │   ├── __init__.py
+│   │   │   └── repositories.py   # Implementação do RestaurantRepository
+│   │   │
+│   │   ├── api/
+│   │   │   ├── __init__.py
+│   │   │   ├── serializers.py    # DRF Serializers para Restaurant
+│   │   │   ├── views.py          # DRF APIViews/ViewSets para Restaurant
+│   │   │   └── urls.py           # Mapeamento de URLs para as views do app restaurants
+│   │   │
+│   │   └── migrations/
+│   │
+│   └── reviews/                  # App para avaliações
+│       ├── __init__.py
+│       ├── apps.py
+│       ├── admin.py
+│       │
+│       ├── domain/
+│       │   ├── __init__.py
+│       │   └── models.py         # Entidade Review (com FKs para User e Restaurant)
+│       │
+│       ├── application/
+│       │   ├── __init__.py
+│       │   └── services.py       # Casos de uso para Review
+│       │
+│       ├── infrastructure/
+│       │   ├── __init__.py
+│       │   └── repositories.py   # Implementação do ReviewRepository
+│       │
+│       ├── api/
+│       │   ├── __init__.py
+│       │   ├── serializers.py    # DRF Serializers para Review
+│       │   ├── views.py          # DRF APIViews/ViewSets para Review
+│       │   └── urls.py           # Mapeamento de URLs para as views do app reviews
+│       │
+│       └── migrations/
+│
+└── requirements.txt              # Arquivo para listar as dependências (Python)
