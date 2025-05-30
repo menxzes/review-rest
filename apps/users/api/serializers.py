@@ -1,6 +1,8 @@
 from rest_framework import serializers
 from apps.users.domain.models import User
 from rest_framework.validators import UniqueValidator
+from django.contrib.auth import authenticate
+from django.utils.translation import gettext_lazy as _
 
 class UserSerializer(serializers.ModelSerializer):
     # serializers para exibir informações do usuário
@@ -43,3 +45,31 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
             last_name = validated_data.get('last_name', '')
         )
         return user
+
+class UserLoginSerializer(serializers.Serializer):
+    # serializers para validação de dados do user
+    email = serializers.EmailField(label=_("Email"))
+    password = serializers.CharField(
+        label=_("Senha"),
+        style={'input_type': 'password'},
+        trim_whitespace=False # Não remove espaços em branco da senha
+    )
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        if email and password:
+            user = authenticate(request=self.context.get('request'), email=email, password=password)
+
+            # Se a autenticação falhar, authenticate() retorna None
+            if not user:
+                msg = _('Não foi possível fazer login com as credenciais fornecidas.')
+                raise serializers.ValidationError(msg, code='authorization')
+        else:
+            msg = _('É necessário incluir "email" e "senha".')
+            raise serializers.ValidationError(msg, code='authorization')
+
+        # Se a autenticação for bem-sucedida, o usuário é retornado nos atributos validados.
+        attrs['user'] = user
+        return attrs

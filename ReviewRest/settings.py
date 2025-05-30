@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     # dependências externas
     'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
