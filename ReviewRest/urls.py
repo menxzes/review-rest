@@ -25,4 +25,7 @@ urlpatterns = [
 
     # paths da api (restaurantes)
     path('api/', include('apps.restaurants.api.urls', namespace='restaurants_api')),
+
+    # paths da api (avaliações)
+    path('api/', include('apps.reviews.api.urls', namespace='reviews_api')),
 ]
