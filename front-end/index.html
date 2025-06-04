@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReviewRest</title>
+    <!-- Fontes do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&family=Pacifico&display=swap" rel="stylesheet">
+    <!-- FontAwesome (para ícones) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>ReviewRest</h1>
+            <nav>
+                <a href="#" id="nav-home">Início</a>
+                <a href="#" id="nav-login" class="nav-guest">Login</a>
+                <a href="#" id="nav-register" class="nav-guest">Cadastre-se</a>
+                <a href="#" id="nav-admin-restaurants" class="nav-admin" style="display:none;">Gerenciar Restaurantes</a>
+                <a href="#" id="nav-logout" class="nav-user" style="display:none;">Logout (<span id="user-email"></span>)</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Views de Visitante -->
+        <section id="login-view" class="view">
+            <h2>Login</h2>
+            <form id="login-form">
+                <div>
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" placeholder="seuemail@exemplo.com" required>
+                </div>
+                <div>
+                    <label for="login-password">Senha</label>
+                    <input type="password" id="login-password" placeholder="Sua senha" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <p id="login-error" class="error-message" style="display:none;"></p>
+        </section>
+
+        <section id="register-view" class="view" style="display:none;">
+            <h2>Cadastro</h2>
+            <form id="register-form">
+                <div>
+                    <label for="register-nome">Nome Completo</label>
+                    <input type="text" id="register-nome" placeholder="Seu nome completo" required>
+                </div>
+                <div>
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" placeholder="seuemail@exemplo.com" required>
+                </div>
+                <div>
+                    <label for="register-password">Senha</label>
+                    <input type="password" id="register-password" placeholder="Crie uma senha" required>
+                </div>
+                <div>
+                    <label for="register-password2">Confirme a Senha</label>
+                    <input type="password" id="register-password2" placeholder="Confirme sua senha" required>
+                </div>
+                <button type="submit">Cadastrar</button>
+            </form>
+            <p id="register-error" class="error-message" style="display:none;"></p>
+        </section>
+
+        <!-- Views Comuns -->
+        <section id="restaurants-list-view" class="view" style="display:none;">
+            <h2>Restaurantes</h2>
+            <div id="restaurants-container">
+                <!-- Restaurantes serão carregados aqui pelo JS -->
+            </div>
+        </section>
+
+        <section id="restaurant-detail-view" class="view" style="display:none;">
+            <h2 id="restaurant-detail-name">Nome do Restaurante</h2>
+            <p><strong>Culinária:</strong> <span id="restaurant-detail-cuisine"></span></p>
+            <p><strong>Endereço:</strong> <span id="restaurant-detail-address"></span></p>
+            <p><strong>Telefone:</strong> <span id="restaurant-detail-phone"></span></p>
+            <p><strong>Descrição:</strong> <span id="restaurant-detail-description"></span></p>
+            
+            <h3>Avaliações</h3>
+            <div id="reviews-container">
+                <!-- Avaliações serão carregadas aqui pelo JS -->
+            </div>
+
+            <div id="add-review-section" class="nav-user" style="display:none; margin-top: 2em;">
+                <h4>Deixe sua Avaliação</h4>
+                <form id="add-review-form">
+                    <input type="hidden" id="review-restaurant-id">
+                    <div>
+                        <label for="review-rating">Nota (1-5):</label>
+                        <input type="number" id="review-rating" min="1" max="5" required>
+                    </div>
+                    <div>
+                        <label for="review-comment">Comentário:</label>
+                        <textarea id="review-comment" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="button-destaque">Enviar Avaliação</button>
+                </form>
+                <p id="review-form-error" class="error-message" style="display:none;"></p>
+            </div>
+        </section>
+
+        <!-- Views de Admin -->
+        <section id="admin-restaurants-view" class="view nav-admin" style="display:none;">
+            <h2>Gerenciar Restaurantes</h2>
+            <button id="show-add-restaurant-form">Adicionar Novo Restaurante</button>
+            
+            <form id="add-edit-restaurant-form" style="display:none; margin-top:1.5em; padding:1.5em; background-color: var(--cor-gelo); border-radius: var(--border-radius-elegante);">
+                <h3 id="form-restaurant-title">Adicionar Restaurante</h3>
+                <input type="hidden" id="restaurant-form-id">
+                <div>
+                    <label for="restaurant-form-name">Nome do Restaurante</label>
+                    <input type="text" id="restaurant-form-name" required>
+                </div>
+                <div>
+                    <label for="restaurant-form-address">Endereço</label>
+                    <input type="text" id="restaurant-form-address" required>
+                </div>
+                <div>
+                    <label for="restaurant-form-cuisine">Tipo de Culinária</label>
+                    <input type="text" id="restaurant-form-cuisine" required>
+                </div>
+                <div>
+                    <label for="restaurant-form-phone">Telefone (opcional)</label>
+                    <input type="text" id="restaurant-form-phone">
+                </div>
+                <div>
+                    <label for="restaurant-form-description">Descrição (opcional)</label>
+                    <textarea id="restaurant-form-description" rows="4"></textarea>
+                </div>
+                <div class="button-group" style="flex-direction: row; justify-content: flex-start;">
+                    <button type="submit" id="save-restaurant-button">Salvar</button>
+                    <button type="button" id="cancel-edit-restaurant-button" class="button-secundario">Cancelar</button>
+                </div>
+            </form>
+            <div id="admin-restaurants-list" style="margin-top: 2em;">
+                <!-- Lista de restaurantes para admin será carregada aqui -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; <span id="current-year"></span> ReviewRest. Todos os direitos reservados.</p>
+        <p><a href="#">Termos de Serviço</a> | <a href="#">Política de Privacidade</a></p>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/restaurants.js"></script>
+    <script src="js/review.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
