@@ -2,7 +2,7 @@ from apps.users.domain.models import User
 from apps.users.infrastructure.repositories import UserRepository
 from .exceptions import UserAlreadyExistsError
 
-class UserResgistrationService:
+class UserRegistrationService:
     def __init__(self, user_repository: UserRepository):
         
         self.user_repository = user_repository

@@ -1,8 +1,8 @@
 from rest_framework import serializers
 from apps.users.domain.models import User
 from rest_framework.validators import UniqueValidator
-from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import authenticate
 
 class UserSerializer(serializers.ModelSerializer):
     # serializers para exibir informações do usuário
@@ -12,39 +12,31 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'is_staff']
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
-    # campo email explicito para UniqueValidator
     email = serializers.EmailField(
-        required = True,
+        required=True,
+        # Mantemos o UniqueValidator para feedback rápido na API
         validators=[UniqueValidator(queryset=User.objects.all(), message="Este endereço de email já está registrado.")]
     )
-    
-    # serializers para registro
     password = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'})
     password2 = serializers.CharField(write_only=True, required=True, style={'input_type': 'password'}, label="Confirme a senha")
+    # O campo 'nome' é herdado do modelo e é obrigatório por padrão.
 
     class Meta:
         model = User
+        # 'nome' é um campo do modelo User e será incluído.
         fields = ['email', 'nome', 'password', 'password2', 'first_name', 'last_name']
         extra_kwargs = {
             'first_name': {'required': False, 'allow_blank': True},
             'last_name': {'required': False, 'allow_blank': True},
+            # 'nome' é obrigatório por padrão pois no modelo User não tem blank=True nem null=True
         }
-    
+
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "As senhas não coincidem."})
-        attrs.pop('password2')
+            raise serializers.ValidationError({"password2": "As senhas não coincidem."}) # Mudei o erro para password2
+        # Não precisamos mais remover 'password2' aqui, pois não vamos chamar um método 'create'
+        # que espera apenas campos do modelo. A view pegará os campos necessários de validated_data.
         return attrs
-    
-    def create(self, validated_data):
-        user = User.objects.create_user(
-            email = validated_data['email'],
-            nome = validated_data['nome'],
-            password = validated_data['password'],
-            first_name = validated_data.get('first_name', ''),
-            last_name = validated_data.get('last_name', '')
-        )
-        return user
 
 class UserLoginSerializer(serializers.Serializer):
     # serializers para validação de dados do user
