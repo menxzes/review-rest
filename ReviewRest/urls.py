@@ -28,4 +28,7 @@ urlpatterns = [
 
     # paths da api (avaliações)
     path('api/', include('apps.reviews.api.urls', namespace='reviews_api')),
+
+    # path de login/logout
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

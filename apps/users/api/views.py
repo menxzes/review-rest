@@ -2,7 +2,8 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
-from .serializers import UserRegistrationSerializer, UserSerializer # UserLoginSerializer também, se estiver no mesmo arquivo
+from rest_framework.authtoken.models import Token
+from .serializers import UserRegistrationSerializer, UserSerializer, UserLoginSerializer # UserLoginSerializer também, se estiver no mesmo arquivo
 # Importe o serviço e o repositório, e a exceção customizada
 from apps.users.application.services import UserRegistrationService
 from apps.users.application.exceptions import UserAlreadyExistsError
