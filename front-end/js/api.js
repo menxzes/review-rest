@@ -28,7 +28,7 @@ async function request(endpoint, method = 'GET', data = null, token = null) {
             throw { status: response.status, data: responseData || { detail: response.statusText } };
         }
 
-        if (response.status === 204) {
+        if (response.status === 204) { // No Content, como em um DELETE bem-sucedido
             return null;
         }
         return responseData;
@@ -43,20 +43,21 @@ async function request(endpoint, method = 'GET', data = null, token = null) {
     }
 }
 
-// Chamadas da API de Usuário
+// === API de Usuário ===
 const apiLogin = (email, password) => request('/users/login/', 'POST', { email, password });
 const apiRegister = (userData) => request('/users/register/', 'POST', userData);
 
-// Chamadas da API de Restaurante
+// === API de Restaurante ===
 const apiGetRestaurants = () => request('/restaurants/');
 const apiGetRestaurantById = (id) => request(`/restaurants/${id}/`);
 const apiCreateRestaurant = (restaurantData, token) => request('/restaurants/', 'POST', restaurantData, token);
 const apiUpdateRestaurant = (id, restaurantData, token) => request(`/restaurants/${id}/`, 'PUT', restaurantData, token);
 const apiDeleteRestaurant = (id, token) => request(`/restaurants/${id}/`, 'DELETE', null, token);
 
-// Chamadas da API de Avaliação
-const apiGetReviews = () => request('/reviews/'); // Para todas as avaliações, se necessário
+// === API de Avaliação ===
 const apiGetReviewsForRestaurant = (restaurantId) => request(`/reviews/?restaurante=${restaurantId}`);
 const apiCreateReview = (reviewData, token) => request('/reviews/', 'POST', reviewData, token);
 const apiUpdateReview = (id, reviewData, token) => request(`/reviews/${id}/`, 'PATCH', reviewData, token);
 const apiDeleteReview = (id, token) => request(`/reviews/${id}/`, 'DELETE', null, token);
+// === API de Perfil ===
+const apiGetUserProfile = (token) => request('/users/profile/', 'GET', null, token);  

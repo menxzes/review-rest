@@ -86,3 +86,12 @@ ReviewRest/
 │       └── migrations/
 │
 └── requirements.txt              # Arquivo para listar as dependências (Python)
+
+
+
+
+
+
+
+
+

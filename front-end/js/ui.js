@@ -23,8 +23,6 @@ function showView(viewId, skipAnimation = false) {
         }
     } else {
         console.error(`View com id ${viewId} não encontrada.`);
-        // Opcional: mostrar uma view de erro padrão
-        // document.getElementById('error-view-default').style.display = 'block';
     }
     clearErrorMessages(); // Limpa erros ao mudar de view
 }
@@ -32,7 +30,7 @@ function showView(viewId, skipAnimation = false) {
 
 function updateNavOnLogin() {
     document.querySelectorAll('.nav-guest').forEach(el => el.style.display = 'none');
-    document.querySelectorAll('.nav-user').forEach(el => el.style.display = 'inline-block'); // Usar inline-block para links <a>
+    document.querySelectorAll('.nav-user').forEach(el => el.style.display = 'inline-block');
     
     const userEmailSpan = document.getElementById('user-email');
     if (currentUser && userEmailSpan) {
@@ -57,14 +55,13 @@ function updateNavOnLogout() {
 
 function initializeUI() {
     if (checkLoginStatus()) { // checkLoginStatus já chama updateNav
-        showView('restaurants-list-view', true); // true para skipAnimation na carga inicial
+        showView('restaurants-list-view', true); 
         if (typeof loadRestaurants === 'function') loadRestaurants();
     } else {
         showView('login-view', true);
     }
 }
 
-// Função para exibir mensagens de erro genéricas ou de formulário
 function showFormError(formId, message) {
     const errorElement = document.getElementById(`${formId}-error`);
     if (errorElement) {
@@ -73,7 +70,6 @@ function showFormError(formId, message) {
     }
 }
 
-// Função para limpar mensagens de erro de um formulário específico
 function clearFormError(formId) {
     const errorElement = document.getElementById(`${formId}-error`);
     if (errorElement) {

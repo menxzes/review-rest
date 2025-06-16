@@ -28,8 +28,7 @@ async function loadRestaurants() {
 }
 
 async function viewRestaurantDetail(restaurantId) {
-    showView('restaurant-detail-view'); // Mostra a view imediatamente para feedback
-    // Limpa conteúdo anterior enquanto carrega
+    showView('restaurant-detail-view'); 
     document.getElementById('restaurant-detail-name').textContent = 'Carregando...';
     document.getElementById('restaurant-detail-cuisine').textContent = '...';
     document.getElementById('restaurant-detail-address').textContent = '...';
@@ -59,18 +58,15 @@ async function viewRestaurantDetail(restaurantId) {
 
     } catch (error) {
         console.error('Falha ao carregar detalhes do restaurante:', error);
-        // Em vez de alert, pode mostrar erro na própria página de detalhes ou voltar
         document.getElementById('restaurant-detail-name').textContent = "Erro ao Carregar";
         document.getElementById('reviews-container').innerHTML = `<p class="error-message" style="display:block;">Não foi possível carregar os detalhes. ${error.data?.detail || error.message || ''}</p>`;
-        // showView('restaurants-list-view'); 
-        // alert('Não foi possível carregar os detalhes do restaurante.');
     }
 }
 
 // --- Gerenciamento de Restaurantes pelo Admin ---
 async function loadAdminRestaurants() {
     if (!currentUser || !currentUser.is_staff) {
-        showView('login-view'); // Redireciona se não for admin
+        showView('login-view');
         return;
     }
     const listElement = document.getElementById('admin-restaurants-list');
@@ -105,7 +101,7 @@ async function loadAdminRestaurants() {
 
 function openAddRestaurantForm() {
     document.getElementById('form-restaurant-title').textContent = 'Adicionar Novo Restaurante';
-    document.getElementById('restaurant-form-id').value = ''; // Limpa ID para garantir que é um novo
+    document.getElementById('restaurant-form-id').value = ''; 
     document.getElementById('add-edit-restaurant-form').reset();
     document.getElementById('save-restaurant-button').textContent = 'Adicionar Restaurante';
     document.getElementById('add-edit-restaurant-form').style.display = 'block';
@@ -148,8 +144,8 @@ async function handleSaveRestaurant(event) {
         nome: document.getElementById('restaurant-form-name').value,
         endereco: document.getElementById('restaurant-form-address').value,
         tipo_culinaria: document.getElementById('restaurant-form-cuisine').value,
-        telefone: document.getElementById('restaurant-form-phone').value || null, // Enviar null se vazio
-        descricao: document.getElementById('restaurant-form-description').value || null, // Enviar null se vazio
+        telefone: document.getElementById('restaurant-form-phone').value || null,
+        descricao: document.getElementById('restaurant-form-description').value || null,
     };
 
     try {
@@ -180,7 +176,6 @@ async function deleteRestaurant(restaurantId) {
         if (typeof loadAdminRestaurants === 'function') loadAdminRestaurants(); 
     } catch (error) {
         console.error('Falha ao deletar restaurante:', error);
-        // Idealmente, mostrar este erro perto da lista de admin, não um alert global
         alert(`Falha ao deletar restaurante. ${error.data?.detail || error.message || ''}`);
     }
 }
