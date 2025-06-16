@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-el+mxfq12rkqcuf&(e2j6%3m*g%4*gkq!2#jiq(*g!ff#gr8)x
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -38,19 +38,22 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # apps criados
+    # dependências externas
+    'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
+
+    # Meus Apps 
     'apps.users.apps.UsersConfig',
     'apps.restaurants.apps.RestaurantsConfig',
     'apps.reviews.apps.ReviewsConfig',
 
-    # dependências externas
-    'rest_framework',
-    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -131,3 +134,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:8080",  
+    "http://127.0.0.1:5500", 
+    "null"                   
+]
