@@ -19,6 +19,7 @@ async function loadReviewsForRestaurant(restaurantId) {
             });
 
             let editDeleteButtons = '';
+            // Mostra botões se o usuário estiver logado e for dono da review OU for admin
             if (currentUser && ( (userEmail && currentUser.email === userEmail) || currentUser.is_staff) ) {
                  editDeleteButtons = `
                     <div class="button-group">
@@ -43,26 +44,18 @@ async function loadReviewsForRestaurant(restaurantId) {
     }
 }
 
-async function handleAddOrUpdateReview(event) {
+async function handleAddReview(event) {
     event.preventDefault();
     if (!authToken || !currentUser) return;
-    clearFormError('add-review-form'); // Limpa erro do formulário de avaliação
+    clearFormError('add-review-form');
 
-    // Determina se é uma edição ou nova avaliação pelo ID no formulário de edição (se existir)
-    // Este handler é genérico, mas o formulário de edição precisaria ser separado ou mais complexo.
-    // Para simplificar, vamos focar no handleAddReview e o openEditReviewForm usará prompts.
-
-    const restaurantId = document.getElementById('review-restaurant-id').value; // Usado para recarregar
-    const reviewIdToUpdate = document.getElementById('update-review-id') ? document.getElementById('update-review-id').value : null;
-
-
+    const restaurantId = document.getElementById('review-restaurant-id').value;
     const reviewData = {
-        restaurante: parseInt(document.getElementById('review-restaurant-id').value), // Sempre necessário
+        restaurante: parseInt(restaurantId),
         nota: parseInt(document.getElementById('review-rating').value),
         comentario: document.getElementById('review-comment').value,
     };
     
-    // Validação básica no frontend
     if (isNaN(reviewData.nota) || reviewData.nota < 1 || reviewData.nota > 5) {
         showFormError('add-review-form', 'A nota deve ser entre 1 e 5.');
         return;
@@ -72,18 +65,12 @@ async function handleAddOrUpdateReview(event) {
         return;
     }
 
-
     try {
-        if (reviewIdToUpdate) { // Lógica de atualização (se tivéssemos um formulário de edição dedicado)
-            await apiUpdateReview(reviewIdToUpdate, reviewData, authToken);
-            // Ocultar formulário de edição, etc.
-        } else { // Nova avaliação
-            await apiCreateReview(reviewData, authToken);
-            document.getElementById('add-review-form').reset();
-        }
-        if (typeof loadReviewsForRestaurant === 'function') loadReviewsForRestaurant(reviewData.restaurante);
+        await apiCreateReview(reviewData, authToken);
+        document.getElementById('add-review-form').reset();
+        if (typeof loadReviewsForRestaurant === 'function') loadReviewsForRestaurant(restaurantId);
     } catch (error) {
-        console.error('Falha ao enviar/atualizar avaliação:', error);
+        console.error('Falha ao enviar avaliação:', error);
         let errorMessage = "Falha ao enviar avaliação.";
         if (error.data) {
              errorMessage = error.data.detail || (error.data.non_field_errors ? error.data.non_field_errors.join(' ') : JSON.stringify(error.data));
@@ -92,11 +79,10 @@ async function handleAddOrUpdateReview(event) {
     }
 }
 
-
-// Função separada para o formulário de adicionar avaliação
+// O listener de submit para o formulário de add-review
 const addReviewFormElement = document.getElementById('add-review-form');
 if (addReviewFormElement) {
-    addReviewFormElement.addEventListener('submit', handleAddOrUpdateReview);
+    addReviewFormElement.addEventListener('submit', handleAddReview);
 }
 
 
@@ -121,7 +107,6 @@ function openEditReviewForm(reviewId, restaurantId, currentRating, currentCommen
     const reviewData = {
         nota: newRating,
         comentario: newComment,
-        restaurante: parseInt(restaurantId) // O backend pode precisar disso para validação ou contexto
     };
     updateReview(reviewId, parseInt(restaurantId), reviewData);
 }

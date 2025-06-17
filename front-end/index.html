@@ -4,13 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ReviewRest</title>
-    <!-- Fontes do Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:wght@700&family=Pacifico&display=swap" rel="stylesheet">
-    <!-- FontAwesome (para ícones) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
@@ -27,7 +25,6 @@
     </header>
 
     <main>
-        <!-- Views de Visitante -->
         <section id="login-view" class="view">
             <h2>Login</h2>
             <form id="login-form">
@@ -68,12 +65,10 @@
             <p id="register-error" class="error-message" style="display:none;"></p>
         </section>
 
-        <!-- Views Comuns -->
         <section id="restaurants-list-view" class="view" style="display:none;">
             <h2>Restaurantes</h2>
             <div id="restaurants-container">
-                <!-- Restaurantes serão carregados aqui pelo JS -->
-            </div>
+                </div>
         </section>
 
         <section id="restaurant-detail-view" class="view" style="display:none;">
@@ -85,8 +80,7 @@
             
             <h3>Avaliações</h3>
             <div id="reviews-container">
-                <!-- Avaliações serão carregadas aqui pelo JS -->
-            </div>
+                </div>
 
             <div id="add-review-section" class="nav-user" style="display:none; margin-top: 2em;">
                 <h4>Deixe sua Avaliação</h4>
@@ -106,7 +100,6 @@
             </div>
         </section>
 
-        <!-- Views de Admin -->
         <section id="admin-restaurants-view" class="view nav-admin" style="display:none;">
             <h2>Gerenciar Restaurantes</h2>
             <button id="show-add-restaurant-form">Adicionar Novo Restaurante</button>
@@ -140,8 +133,7 @@
                 </div>
             </form>
             <div id="admin-restaurants-list" style="margin-top: 2em;">
-                <!-- Lista de restaurantes para admin será carregada aqui -->
-            </div>
+                </div>
         </section>
     </main>
 
