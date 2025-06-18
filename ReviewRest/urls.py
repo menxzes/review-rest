@@ -16,19 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.http import HttpResponse
+
+def home(request):
+    return HttpResponse("Bem-vindo à API de Reviews!")
 
 urlpatterns = [
+    path('', home, name='home'),
     path('admin/', admin.site.urls),
-
-    # paths da api (usuários)
-    path('api/users/', include('apps.users.api.urls', namespace='users_api')),
-
-    # paths da api (restaurantes)
-    path('api/', include('apps.restaurants.api.urls', namespace='restaurants_api')),
-
-    # paths da api (avaliações)
-    path('api/', include('apps.reviews.api.urls', namespace='reviews_api')),
-
-    # path de login/logout
-    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('api/', include('apps.reviews.urls')),
 ]

@@ -1,12 +1,10 @@
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import ReviewViewSet
-
-app_name = 'reviews_api'
-
-router = DefaultRouter()
-router.register(r'reviews', ReviewViewSet, basename='review')
+# apps/reviews/urls.py
+from django.urls import path
+from .views import ReviewList, ReviewDetail, RestaurantList, RestaurantDetail
 
 urlpatterns = [
-    path('', include(router.urls)),
+    path('restaurants/', RestaurantList.as_view(), name='restaurant-list'),
+    path('restaurants/<int:pk>/', RestaurantDetail.as_view(), name='restaurant-detail'),
+    path('reviews/', ReviewList.as_view(), name='review-list'),
+    path('reviews/<int:pk>/', ReviewDetail.as_view(), name='review-detail'),
 ]
