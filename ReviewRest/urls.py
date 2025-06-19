@@ -16,13 +16,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.http import HttpResponse
+from rest_framework.routers import DefaultRouter # Importa DefaultRouter
+from apps.reviews.api.views import ReviewViewSet # Importa ReviewViewSet
+from apps.restaurants.api.views import RestaurantViewSet # Importa RestaurantViewSet
+from apps.users.api import urls as users_urls # Importa o módulo urls de users
 
-def home(request):
-    return HttpResponse("Bem-vindo à API de Reviews!")
+# Crie os routers aqui para cada app, se preferir centralizá-los
+router_reviews = DefaultRouter()
+router_reviews.register(r'reviews', ReviewViewSet, basename='review') # Basename 'review' para reviews
+
+router_restaurants = DefaultRouter()
+router_restaurants.register(r'restaurants', RestaurantViewSet, basename='restaurant') # Basename 'restaurant' para restaurants
 
 urlpatterns = [
-    path('', home, name='home'),
     path('admin/', admin.site.urls),
-    path('api/', include('apps.reviews.urls')),
+    # Inclui as URLs geradas pelo router de reviews
+    path('api/', include(router_reviews.urls)), # review URLs: /api/reviews/, /api/reviews/{id}/
+    
+    # Inclui as URLs geradas pelo router de restaurants
+    path('api/', include(router_restaurants.urls)), # restaurant URLs: /api/restaurants/, /api/restaurants/{id}/
+    
+    # Inclui as URLs do app users (se users/api/urls.py já usa path/router ou api_view)
+    path('api/users/', include(users_urls)),
 ]

@@ -5,12 +5,12 @@ from apps.restaurants.domain.models import Restaurant
 
 class ReviewRepository:
 
-    def create(self, restaurante: Restaurant, usuario: User, nota: int, comentario: str) -> Review:
+    def create(self, restaurant: Restaurant, user: User, rating: int, comment: str) -> Review:
         review = Review.objects.create(
-            restaurante=restaurante,
-            usuario=usuario,
-            nota=nota,
-            comentario=comentario,
+            restaurant=restaurant, # Corrigido: usando o nome de campo real
+            user=user,
+            rating=rating,
+            comment=comment
         )
         return review
     
@@ -19,21 +19,21 @@ class ReviewRepository:
             return Review.objects.get(id=review_id)
         except Review.DoesNotExist:
             return None
+        
+        pass
     
-    def get_review_by_restaurant(self, restaurant: Restaurant) -> List[Review]:
-        return list(Review.objects.filter(restaurante=restaurant).order_by('-data_avaliacao'))
+    def get_reviews_by_restaurant(self, restaurant: Restaurant) -> List[Review]:
+        return list(Review.objects.filter(restaurant_id=restaurant.id).order_by('-date'))
     
     def get_user_review_for_restaurant(self, user: User, restaurant: Restaurant) -> Optional[Review]:
-        try:
-            return Review.objects.get(usuario=user, restaurante=restaurant)
-        except Review.DoesNotExist:
-            return None
+        return Review.objects.filter(user=user, restaurant=restaurant).first()
         
-    def update(self, review: Review, nota: int, comentario: str) -> Review:
-        review.nota = nota
-        review.comentario = comentario
+    def update(self, review: Review, rating: int, comment: str) -> Review:
+        review.rating = rating # Corrigido
+        review.comment = comment # Corrigido
         review.save()
         return review
 
     def delete(self, review: Review):
         review.delete()
+        pass

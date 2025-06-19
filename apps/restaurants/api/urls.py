@@ -1,12 +1,10 @@
-from django.urls import path, include
+# apps/restaurants/api/urls.py
+
 from rest_framework.routers import DefaultRouter
 from .views import RestaurantViewSet
 
-app_name = 'restaurants_api'
+# Não precisamos de 'app_name' ou 'urlpatterns' aqui diretamente se só vamos exportar o router.
 
 router = DefaultRouter()
-router.register(r'restaurants', RestaurantViewSet, basename='restaurant')
-
-urlpatterns = [
-    path('', include(router.urls)),
-]
+router.register(r'', RestaurantViewSet, basename='restaurant') # <-- Mude 'restaurants' para '' (string vazia)
+# Isso significa que o RestaurantViewSet será o "root" deste arquivo de URLs.

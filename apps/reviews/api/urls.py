@@ -1,10 +1,14 @@
-# apps/reviews/urls.py
-from django.urls import path
-from .views import ReviewList, ReviewDetail, RestaurantList, RestaurantDetail
+# apps/reviews/api/urls.py
 
-urlpatterns = [
-    path('restaurants/', RestaurantList.as_view(), name='restaurant-list'),
-    path('restaurants/<int:pk>/', RestaurantDetail.as_view(), name='restaurant-detail'),
-    path('reviews/', ReviewList.as_view(), name='review-list'),
-    path('reviews/<int:pk>/', ReviewDetail.as_view(), name='review-detail'),
-]
+from rest_framework.routers import DefaultRouter
+from apps.reviews.api.views import ReviewViewSet # Importa apenas o ViewSet
+
+# Crie uma instância do DefaultRouter
+router = DefaultRouter()
+
+# Registre o ReviewViewSet com o router
+# O basename 'reviews' é usado para gerar os nomes das URLs (e.g., 'reviews-list', 'reviews-detail')
+router.register(r'reviews', ReviewViewSet, basename='reviews')
+
+# As URLs geradas pelo router serão automaticamente incluídas aqui
+urlpatterns = router.urls
