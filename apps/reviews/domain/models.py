@@ -1,5 +1,7 @@
-# apps/reviews/models.py
 from django.db import models
+# Importe seu modelo User customizado
+from apps.users.domain.models import User
+from django.utils.translation import gettext_lazy as _
 
 class Restaurant(models.Model):
     name = models.CharField(max_length=100)
@@ -11,10 +13,14 @@ class Restaurant(models.Model):
 
 class Review(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='reviews')
-    user_name = models.CharField(max_length=100)
+    # --- CORREÇÃO AQUI ---
+    # Remova user_name e adicione uma ForeignKey para User
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews') # Nome de campo 'user'
+    # --- FIM DA CORREÇÃO ---
     rating = models.IntegerField()
     comment = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Review de {self.user_name} para {self.restaurant.name}"
+        # Altere para usar o email ou nome do usuário relacionado
+        return f"Review de {self.user.email} para {self.restaurant.nome}" # Ou self.user.nome se User tiver campo 'nome'

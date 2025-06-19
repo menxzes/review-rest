@@ -1,21 +1,21 @@
-let currentUser = null;
-let authToken = localStorage.getItem('authToken');
+window.currentUser = null;
+window.authToken = localStorage.getItem('authToken');
 
 function storeToken(token) {
     localStorage.setItem('authToken', token);
-    authToken = token;
+    window.authToken = token; // Atualiza a variável global
 }
 
 function storeCurrentUser(user) {
     localStorage.setItem('currentUser', JSON.stringify(user));
-    currentUser = user;
+    window.currentUser = user; // Atualiza a variável global
 }
 
 function clearTokenAndUser() {
     localStorage.removeItem('authToken');
     localStorage.removeItem('currentUser');
-    authToken = null;
-    currentUser = null;
+    window.authToken = null; // Limpa a variável global
+    window.currentUser = null; // Limpa a variável global
 }
 
 function displayAuthError(viewId, error) {
@@ -26,6 +26,7 @@ function displayAuthError(viewId, error) {
             if (error.data.detail) {
                 errorMessage = error.data.detail;
             } else if (typeof error.data === 'object') {
+                // Tenta pegar a primeira mensagem de erro de validação
                 errorMessage = Object.values(error.data).flat().join(' ');
             } else if (typeof error.data === 'string') {
                 errorMessage = error.data;
@@ -46,7 +47,7 @@ async function loginUser(email, password) {
         if (response && response.token && response.user) {
             storeToken(response.token);
             storeCurrentUser(response.user);
-            updateNavOnLogin();
+            updateNavOnLogin(); // Presumindo que updateNavOnLogin usa window.currentUser
             showView('restaurants-list-view');
             if (typeof loadRestaurants === 'function') loadRestaurants();
             return true;
@@ -66,7 +67,7 @@ async function registerUser(userData) {
         const response = await apiRegister(userData);
         alert('Cadastro realizado com sucesso! Por favor, faça o login.');
         showView('login-view');
-        document.getElementById('register-form').reset(); // Limpa o formulário de registro
+        document.getElementById('register-form').reset();
         return true;
     } catch (error) {
         console.error('Cadastro falhou:', error);
@@ -77,17 +78,17 @@ async function registerUser(userData) {
 
 function logoutUser() {
     clearTokenAndUser();
-    updateNavOnLogout();
+    updateNavOnLogout(); // Presumindo que updateNavOnLogout usa window.currentUser
     showView('login-view');
 }
 
 function checkLoginStatus() {
-    authToken = localStorage.getItem('authToken');
+    window.authToken = localStorage.getItem('authToken'); // Lê para a variável global
     const storedUserString = localStorage.getItem('currentUser');
     
-    if (authToken && storedUserString) {
+    if (window.authToken && storedUserString) {
         try {
-            currentUser = JSON.parse(storedUserString);
+            window.currentUser = JSON.parse(storedUserString); // Parseia para a variável global
             updateNavOnLogin();
             return true;
         } catch (e) {
@@ -96,6 +97,6 @@ function checkLoginStatus() {
             return false;
         }
     }
-    updateNavOnLogout(); // Garante que a UI reflita o estado de logout
+    updateNavOnLogout();
     return false;
 }
